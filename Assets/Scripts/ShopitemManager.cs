@@ -43,14 +43,18 @@ public class ShopitemManager : MonoBehaviour
                 goldManager.userGold -= pickaxePrice[pickaxeNumber];
                 int itemValue = int.Parse(ItemValue.text);
                 goldManager.userUpGold += itemValue;
+                pickaxeNumber++;
+                ItemName.text = itemName[pickaxeNumber];
+                ItemPrice.text = pickaxePrice[pickaxeNumber].ToString();
+                ItemValue.text = pickaxeValue[pickaxeNumber].ToString();
+                if (pickaxeNumber == 5)
+                {
+                    PickaxePanel.SetActive(false);
+                }
             }
-            pickaxeNumber++;
-            ItemName.text = itemName[pickaxeNumber];
-            ItemPrice.text = pickaxePrice[pickaxeNumber].ToString();
-            ItemValue.text = pickaxeValue[pickaxeNumber].ToString();
-            if(pickaxeNumber == 5)
+            else
             {
-                PickaxePanel.SetActive(false);
+                Debug.Log("Not Enough Money");
             }
         }
     }

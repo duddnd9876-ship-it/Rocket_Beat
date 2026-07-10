@@ -26,7 +26,7 @@ public class GoldManager : MonoBehaviour
         UpdateText();
     }
 
-    void UpdateText()
+    private void UpdateText()
     {
         currentGold.text = userGold.ToString();
     }
