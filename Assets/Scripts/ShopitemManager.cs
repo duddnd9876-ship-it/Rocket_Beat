@@ -14,7 +14,7 @@ public class ShopitemManager : MonoBehaviour
 
     private int pickaxeNumber = 0;
     private int[] pickaxeValue = new int[6] { 1, 2, 3, 4, 5, 0};
-    private string[] itemName = new string[6] {"Wood Pickaxe", "Rock Pickaxe", "Iron Pickaxe", "Diamond Pickaxe", "Titanium Pickaxe", "Sold Out"};
+    private string[] itemName = new string[6] {"나무 곡괭이", "돌 곡괭이", "철 곡괭이", "다이아 곡괭이", "티타늄 곡괭이", "Sold Out"};
     private int[] pickaxePrice = new int[6] { 20, 40, 60, 140, 160, 0 };
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
