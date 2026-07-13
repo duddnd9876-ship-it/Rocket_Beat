@@ -11,16 +11,17 @@ public class ChartManager : MonoBehaviour
 {
     public GoldManager goldManager;
 
-    public TMP_Text ChartNameText;
-    public TMP_Text ChartValueText;
-    public TMP_Text ChartPriceText;
-    public TMP_Text ChartPiecesText;
+    public Text ChartNameText;
+    public Text ChartValueText;
+    public Text ChartPriceText;
+    public Text ChartPiecesText;
     public Button ChartBuyButton;
     public Button ChartSellButton;
-    public TMP_Text currentGold;
-    public TMP_Text MaxBuyText;
+    public Text currentGold;
+    public Text MaxBuyText;
     public Button MaxBuyUpButton;
     public Button MaxBuyDownButton;
+    public UIStockChart stockChart; // 선 그래프 컴포넌트 참조
 
     private double ChartPrice;
     private string[] chartName = new string[] { "Floor tile construction", "King of Janggi", "Cure Corporation", "CAOCAO constraints", "will do it yesterday", "white streaming", "Markdown SP", "Rocket Coin" };
@@ -43,6 +44,12 @@ public class ChartManager : MonoBehaviour
 
         // 처음 가격 저장
         chartHistory.Add(ChartPrice);
+
+        // 그래프 초기 데이터 전달
+        if (stockChart != null)
+        {
+            stockChart.UpdateData(chartHistory);
+        }
 
         // 10초마다 가격 변경 시작
         StartCoroutine(ChangePrice());
@@ -67,7 +74,7 @@ public class ChartManager : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(10f);
+            yield return new WaitForSeconds(1f);
 
             // -200 ~ 200
             int randomValue = Random.Range(-200, 201);
@@ -82,6 +89,18 @@ public class ChartManager : MonoBehaviour
 
             // 기록 저장
             chartHistory.Add(ChartPrice);
+
+            // 너무 많은 데이터가 쌓이면 그래프가 복잡해지므로 최근 30개로 유지
+            if (chartHistory.Count > 30)
+            {
+                chartHistory.RemoveAt(0);
+            }
+
+            // 그래프 컴포넌트 갱신
+            if (stockChart != null)
+            {
+                stockChart.UpdateData(chartHistory);
+            }
 
             // 화면 출력
             ChartPriceText.text = ChartPrice.ToString("F0");

@@ -6,11 +6,11 @@ using UnityEngine.UI;
 
 public class GoldManager : MonoBehaviour
 {
-    public TMP_Text currentGold;   // 숫자를 표시할 텍스트
+    public Text currentGold;   // 숫자를 표시할 텍스트
     public int userGold = 0;        // 현재 숫자
     public int userUpGold = 1; // 버튼을 누를 때 증가량
     public Button goldButton;
-    public TMP_Text TargetGold;
+    public Text TargetGold;
 
     private int clearMissionGold = 999999999;
 
