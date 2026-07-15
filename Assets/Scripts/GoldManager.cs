@@ -11,6 +11,7 @@ public class GoldManager : MonoBehaviour
     public int userUpGold = 1; // 버튼을 누를 때 증가량
     public Button goldButton;
     public Text TargetGold;
+    public Text UserUpGold;
 
     private int clearMissionGold = 999999999;
 
@@ -18,6 +19,7 @@ public class GoldManager : MonoBehaviour
     {
         goldButton.onClick.AddListener(IncreaseNumber);
         clearMissionGold = int.Parse(TargetGold.text);
+        UserUpGold.text = userUpGold.ToString();
     }
     private void FixedUpdate()
     {

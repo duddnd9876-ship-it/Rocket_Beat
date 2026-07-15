@@ -13,25 +13,28 @@ public class ChartManager : MonoBehaviour
     public GoldManager goldManager;
     public ChartDataManager dataManager;
 
-    public Text ChartPiecesText;
-    public Button ChartBuyButton;
-    public Button ChartSellButton;
     public Text currentGold;
-    public Text MaxBuyText;
-    public Button MaxBuyUpButton;
-    public Button MaxBuyDownButton;
     public UIStockChart stockChart; // 선 그래프 컴포넌트 참조
 
     [System.Serializable]
     public class ChartButtonUI
     {
+        [Header("종목 선택")]
         public Button button;
         public Text nameText;  // 차트명
         public Text priceText; // 차트가격
         public Text typeText;  // 차트 종류
+
+        [Header("이 종목 전용 거래 UI")]
+        public Text piecesText;        // 이 종목 보유 수량
+        public Text maxBuyText;        // 이 종목 1회 구매/판매 수량
+        public Button buyButton;
+        public Button sellButton;
+        public Button maxBuyUpButton;
+        public Button maxBuyDownButton;
     }
 
-    [Header("차트 선택 버튼 (4개) - 각자 이름/가격/종류 텍스트를 가짐")]
+    [Header("차트 선택 버튼 (4개) - 각자 이름/가격/종류 + 거래UI를 가짐")]
     public ChartButtonUI[] chartButtons; // 인스펙터에서 4개 항목, index 0~3이 데이터 테이블 0~3번째 줄에 대응
 
     [Header("차트 해금 패널 (ShopUIManager의 UnlockChartPanel01~04와 동일한 오브젝트)")]
@@ -47,21 +50,44 @@ public class ChartManager : MonoBehaviour
         return !unlockChartPanels[index].activeSelf;
     }
 
-    private int ChartPieces = 0;
-    private int maxBuy = 1;
-    private int currentChart = 0;
+    // 종목별 상태 (index = 차트 인덱스)
+    private int[] chartPieces;   // 종목별 보유 수량
+    private int[] maxBuyArr;     // 종목별 1회 구매/판매 수량
+
+    private int currentChart = 0; // 그래프에 표시 중인(선택된) 종목
     private bool initialized = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        ChartPiecesText.text = ChartPieces.ToString();
-        MaxBuyText.text = maxBuy.ToString();
+        chartPieces = new int[chartButtons.Length];
+        maxBuyArr = new int[chartButtons.Length];
 
-        ChartBuyButton.onClick.AddListener(BuyChart);
-        ChartSellButton.onClick.AddListener(SellChart);
-        MaxBuyUpButton.onClick.AddListener(MaxBuyUp);
-        MaxBuyDownButton.onClick.AddListener(MaxBuyDown);
+        for (int i = 0; i < chartButtons.Length; i++)
+        {
+            maxBuyArr[i] = 1;
+
+            int index = i; // 클로저 캡처 문제 방지
+
+            ChartButtonUI ui = chartButtons[i];
+
+            if (ui.buyButton != null)
+                ui.buyButton.onClick.AddListener(() => BuyChart(index));
+
+            if (ui.sellButton != null)
+                ui.sellButton.onClick.AddListener(() => SellChart(index));
+
+            if (ui.maxBuyUpButton != null)
+                ui.maxBuyUpButton.onClick.AddListener(() => MaxBuyUp(index));
+
+            if (ui.maxBuyDownButton != null)
+                ui.maxBuyDownButton.onClick.AddListener(() => MaxBuyDown(index));
+
+            UpdatePiecesText(i);
+            UpdateMaxBuyText(i);
+        }
+
+        UpdateGoldText();
     }
 
     // Update is called once per frame
@@ -79,9 +105,6 @@ public class ChartManager : MonoBehaviour
             SetupChartButtons();
 
             SelectChart(0); // 처음엔 데이터 테이블 첫 줄을 기본 선택
-
-            ChartPiecesText.text = ChartPieces.ToString();
-            MaxBuyText.text = maxBuy.ToString();
 
             StartCoroutine(ChangePrice());
         }
@@ -163,21 +186,26 @@ public class ChartManager : MonoBehaviour
         }
     }
 
-    public void BuyChart()
+    // index: 어떤 종목을 사고파는지
+    public void BuyChart(int index)
     {
-        ChartData data = dataManager.chartList[currentChart];
+        if (index < 0 || index >= dataManager.chartList.Count)
+            return;
 
-        if (maxBuy * data.currentPrice <= goldManager.userGold)
+        ChartData data = dataManager.chartList[index];
+        int buyCount = maxBuyArr[index];
+
+        if (buyCount * data.currentPrice <= goldManager.userGold)
         {
-            for (int i = 0; i < maxBuy; i++)
+            for (int i = 0; i < buyCount; i++)
             {
                 if (goldManager.userGold >= data.currentPrice)
                 {
                     goldManager.userGold -= (int)data.currentPrice;
-                    UpdateText();
+                    UpdateGoldText();
 
-                    ChartPieces++;
-                    ChartPiecesText.text = ChartPieces.ToString();
+                    chartPieces[index]++;
+                    UpdatePiecesText(index);
                 }
                 else
                 {
@@ -191,21 +219,26 @@ public class ChartManager : MonoBehaviour
         }
     }
 
-    public void SellChart()
+    public void SellChart(int index)
     {
-        if (ChartPieces >= maxBuy)
-        {
-            ChartData data = dataManager.chartList[currentChart];
+        if (index < 0 || index >= dataManager.chartList.Count)
+            return;
 
-            for (int i = 0; i < maxBuy; i++)
+        int sellCount = maxBuyArr[index];
+
+        if (chartPieces[index] >= sellCount)
+        {
+            ChartData data = dataManager.chartList[index];
+
+            for (int i = 0; i < sellCount; i++)
             {
-                if (ChartPieces >= 1)
+                if (chartPieces[index] >= 1)
                 {
                     goldManager.userGold += (int)data.currentPrice;
-                    UpdateText();
+                    UpdateGoldText();
 
-                    ChartPieces--;
-                    ChartPiecesText.text = ChartPieces.ToString();
+                    chartPieces[index]--;
+                    UpdatePiecesText(index);
                 }
                 else
                 {
@@ -219,32 +252,43 @@ public class ChartManager : MonoBehaviour
         }
     }
 
-    public void MaxBuyUp()
+    public void MaxBuyUp(int index)
     {
-        maxBuy = int.Parse(MaxBuyText.text);
-        maxBuy++;
-        UpdateBuyText();
+        if (index < 0 || index >= maxBuyArr.Length)
+            return;
+
+        maxBuyArr[index]++;
+        UpdateMaxBuyText(index);
     }
 
-    public void MaxBuyDown()
+    public void MaxBuyDown(int index)
     {
-        if (maxBuy > 0)
+        if (index < 0 || index >= maxBuyArr.Length)
+            return;
+
+        if (maxBuyArr[index] > 1)
         {
-            maxBuy = int.Parse(MaxBuyText.text);
-            maxBuy--;
-            UpdateBuyText();
+            maxBuyArr[index]--;
+            UpdateMaxBuyText(index);
         }
     }
 
-    private void UpdateText()
+    private void UpdateGoldText()
     {
         double userGold = goldManager.userGold;
         currentGold.text = userGold.ToString();
     }
 
-    private void UpdateBuyText()
+    private void UpdatePiecesText(int index)
     {
-        MaxBuyText.text = maxBuy.ToString();
+        if (chartButtons[index].piecesText != null)
+            chartButtons[index].piecesText.text = chartPieces[index].ToString();
+    }
+
+    private void UpdateMaxBuyText(int index)
+    {
+        if (chartButtons[index].maxBuyText != null)
+            chartButtons[index].maxBuyText.text = maxBuyArr[index].ToString();
     }
 
     // index: 0 = 데이터 테이블 첫 번째 줄, 1 = 두 번째 줄, ...

@@ -118,6 +118,7 @@ public class ShopUIManager : MonoBehaviour
 
         goldManager.userGold -= item.price;
         goldManager.userUpGold += item.up;
+        goldManager.UserUpGold.text = goldManager.userUpGold.ToString();
 
         pickaxeNumber++;
 
@@ -169,6 +170,7 @@ public class ShopUIManager : MonoBehaviour
 
         goldManager.userGold -= item.price;
         goldManager.userUpGold += item.up;
+        goldManager.UserUpGold.text = goldManager.userUpGold.ToString();
 
         jHammerNumber++;
 
@@ -220,6 +222,7 @@ public class ShopUIManager : MonoBehaviour
 
         goldManager.userGold -= item.price;
         goldManager.userUpGold += item.up;
+        goldManager.UserUpGold.text = goldManager.userUpGold.ToString();
 
         drillNumber++;
 
@@ -272,6 +275,7 @@ public class ShopUIManager : MonoBehaviour
 
         goldManager.userGold -= item.price;
         goldManager.userUpGold += item.up;
+        goldManager.UserUpGold.text = goldManager.userUpGold.ToString();
 
         dynamiteNumber++;
 
