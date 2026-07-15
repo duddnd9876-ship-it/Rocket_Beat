@@ -521,6 +521,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e049407eb47dd7840ae237dfb32d0ff5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameQuitManager
+  QuitButton: {fileID: 1104599457}
 --- !u!4 &1081555365
 Transform:
   m_ObjectHideFlags: 0
@@ -870,7 +871,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 14f7f7e7c3b9a8745a72cd2c70e4cf49, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.677
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 1
   Mute: 0

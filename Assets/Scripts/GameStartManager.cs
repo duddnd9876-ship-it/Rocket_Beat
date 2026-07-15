@@ -24,7 +24,7 @@ public class GameStartManager : MonoBehaviour
     {
         SceneManager.LoadScene("Start");
     }
-    public void QuitGame()
+    public static void QuitGame()
     {
         UnityEditor.EditorApplication.isPlaying = false;
         Application.Quit();

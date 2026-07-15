@@ -1,5 +1,6 @@
-using Unity.AppUI.UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameQuitManager : MonoBehaviour
 {
@@ -7,7 +8,7 @@ public class GameQuitManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        QuitButton.onClick.AddListener(QuitGame);
     }
 
     // Update is called once per frame
@@ -15,7 +16,7 @@ public class GameQuitManager : MonoBehaviour
     {
 
     }
-    public void QuitGame()
+    public static void QuitGame()
     {
         UnityEditor.EditorApplication.isPlaying = false;
         Application.Quit();
