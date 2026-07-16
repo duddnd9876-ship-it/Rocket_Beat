@@ -26,7 +26,6 @@ public class GameStartManager : MonoBehaviour
     }
     public static void QuitGame()
     {
-        UnityEditor.EditorApplication.isPlaying = false;
         Application.Quit();
     }
 }
