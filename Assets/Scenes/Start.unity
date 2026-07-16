@@ -5183,6 +5183,7 @@ MonoBehaviour:
   UnlockChartPanel02: {fileID: 1235284373}
   UnlockChartPanel03: {fileID: 1825430754}
   UnlockChartPanel04: {fileID: 1961846918}
+  DynaBuy: 0
 --- !u!1 &589069672
 GameObject:
   m_ObjectHideFlags: 0
@@ -7715,7 +7716,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -9.455811, y: -324.9088}
+  m_AnchoredPosition: {x: -9.455811, y: -324.90863}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &927983404
@@ -14186,8 +14187,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000030517578, y: 0}
-  m_SizeDelta: {x: 671.9279, y: 73.4298}
+  m_AnchoredPosition: {x: 0.000047684, y: 0}
+  m_SizeDelta: {x: 1004.98, y: 112.436}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1678236137
 MonoBehaviour:
@@ -14223,7 +14224,7 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "\uD574\uAE08 \uC870\uAC74 : \uB300\uB7C9 \uB2E4\uC774\uB108\uB9C8\uC774\uD2B8
-    \uAD6C\uB9E4"
+    \uD574\uAE08 &\n        \uC18C\uC9C0 \uACE8\uB4DC 1\uCC9C\uB9CC\uC774\uC0C1"
 --- !u!222 &1678236138
 CanvasRenderer:
   m_ObjectHideFlags: 0

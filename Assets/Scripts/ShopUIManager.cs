@@ -52,6 +52,8 @@ public class ShopUIManager : MonoBehaviour
     public GameObject UnlockChartPanel03;
     public GameObject UnlockChartPanel04;
 
+    public bool DynaBuy = false;
+
     private void Start()
     {
         PickaxePanel.SetActive(false);
@@ -64,6 +66,20 @@ public class ShopUIManager : MonoBehaviour
         JHbuyButton.onClick.AddListener(JackHammerBuy);
         DrillBuyButton.onClick.AddListener(DrillBuy);
         DynamiteBuyButton.onClick.AddListener(DynamiteBuy);
+
+        if (goldManager.userGold >= 10000000 && DynaBuy == true)
+        {
+            UnlockChartPanel04.SetActive(false);
+        }
+
+    }
+    private void FixedUpdate()
+    {
+
+        if (goldManager.userGold >= 10000000 && DynaBuy == true)
+        {
+            UnlockChartPanel04.SetActive(false);
+        }
     }
 
     private void Update()
@@ -80,6 +96,7 @@ public class ShopUIManager : MonoBehaviour
             UpdateDrillUI();
             UpdateDynamiteUI();
         }
+
     }
 
     #region Pickaxe
@@ -285,7 +302,11 @@ public class ShopUIManager : MonoBehaviour
         {
             DynamiteLockPanel.SetActive(true);
             DynamitepanelText.text = "Sold Out";
-            UnlockChartPanel04.SetActive(false);
+            DynaBuy = true;
+            if (goldManager.userGold >= 10000000 && DynaBuy == true)
+            {
+                UnlockChartPanel04.SetActive(false);
+            }
         }
     }
 
