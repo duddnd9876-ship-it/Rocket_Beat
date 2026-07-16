@@ -23,7 +23,7 @@ public class OptionManager : MonoBehaviour
     private const string SFX_PREF_KEY = "sfxVolume";
     private const string BGM_MUTE_PREF_KEY = "isBgmMuted";
     private const string SFX_MUTE_PREF_KEY = "isSfxMuted";
-    private const float DEFAULT_VOLUME = 0.75f;
+    private const float DEFAULT_VOLUME = 0.0112f; // 약 -39dB (원하는 초기 시작 볼륨)
 
     private bool isBgmMuted;
     private bool isSfxMuted;
@@ -91,6 +91,8 @@ public class OptionManager : MonoBehaviour
             PlayerPrefs.SetInt(BGM_MUTE_PREF_KEY, 0);
             SetMuteImage(bgmMuteButtonImage, false);
         }
+
+        PlayerPrefs.Save();
     }
 
     void OnSFXSliderChanged(float value)
@@ -104,6 +106,8 @@ public class OptionManager : MonoBehaviour
             PlayerPrefs.SetInt(SFX_MUTE_PREF_KEY, 0);
             SetMuteImage(sfxMuteButtonImage, false);
         }
+
+        PlayerPrefs.Save();
     }
 
     void OnBGMMuteButtonClicked()
@@ -111,6 +115,7 @@ public class OptionManager : MonoBehaviour
         isBgmMuted = !isBgmMuted;
         PlayerPrefs.SetInt(BGM_MUTE_PREF_KEY, isBgmMuted ? 1 : 0);
         ApplyBgmMuteState();
+        PlayerPrefs.Save();
     }
 
     void OnSFXMuteButtonClicked()
@@ -118,6 +123,7 @@ public class OptionManager : MonoBehaviour
         isSfxMuted = !isSfxMuted;
         PlayerPrefs.SetInt(SFX_MUTE_PREF_KEY, isSfxMuted ? 1 : 0);
         ApplySfxMuteState();
+        PlayerPrefs.Save();
     }
 
     void ApplyBgmMuteState()
