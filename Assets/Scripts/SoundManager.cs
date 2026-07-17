@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 public class SoundManager : MonoBehaviour
@@ -25,6 +26,16 @@ public class SoundManager : MonoBehaviour
     [Header("Button SFX")]
     public SoundGroup[] groups;
 
+    [System.Serializable]
+    public class SceneBGM
+    {
+        public string sceneName;  // 정확히 씬 파일 이름과 일치해야 함
+        public AudioClip clip;    // 이 씬에서 재생할 브금
+    }
+
+    [Header("Scene BGM Mapping")]
+    public SceneBGM[] sceneBGMs;  // 씬별로 자동 재생할 브금 매핑 (없으면 정지만 됨)
+
     private const string BGM_MIXER_PARAM = "BGMVolume";
     private const string SFX_MIXER_PARAM = "SFXVolume";
 
@@ -37,6 +48,37 @@ public class SoundManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        // 씬이 로드될 때마다 브금을 정지시키기 위한 이벤트 구독
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    /// <summary>
+    /// 씬이 새로 로드될 때마다 자동으로 호출됨.
+    /// sceneBGMs에 매핑된 씬이면 해당 브금을 재생하고, 없으면 정지시킴.
+    /// </summary>
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        AudioClip clipToPlay = null;
+
+        foreach (var entry in sceneBGMs)
+        {
+            if (entry.sceneName == scene.name)
+            {
+                clipToPlay = entry.clip;
+                break;
+            }
+        }
+
+        if (clipToPlay != null)
+            PlayBGM(clipToPlay);
+        else
+            StopBGM();
     }
 
     void Start()
@@ -73,6 +115,15 @@ public class SoundManager : MonoBehaviour
         bgmSource.clip = clip;
         bgmSource.loop = loop;
         bgmSource.Play();
+    }
+
+    /// <summary>
+    /// 브금 정지. 씬 전환 시 자동 호출되며, 필요하면 수동으로도 호출 가능.
+    /// </summary>
+    public void StopBGM()
+    {
+        if (bgmSource != null)
+            bgmSource.Stop();
     }
 
     /// <summary>

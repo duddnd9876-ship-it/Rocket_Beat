@@ -6768,6 +6768,13 @@ MonoBehaviour:
     buttons:
     - {fileID: 240688312}
     clip: {fileID: 8300000, guid: b17873a0102ab3d4cb9d0496f826dfe7, type: 3}
+  sceneBGMs:
+  - sceneName: Main
+    clip: {fileID: 8300000, guid: 205e1ec438975ee45adf95f713f44c8a, type: 3}
+  - sceneName: Start
+    clip: {fileID: 8300000, guid: 04cfee499d67d3e4aa00711e23cf8bfb, type: 3}
+  - sceneName: Ending
+    clip: {fileID: 8300000, guid: 14f7f7e7c3b9a8745a72cd2c70e4cf49, type: 3}
 --- !u!4 &815471670
 Transform:
   m_ObjectHideFlags: 0
